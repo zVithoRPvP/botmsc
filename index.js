@@ -194,7 +194,7 @@ client.on('message', msg => {
 
 client.on('message', msg => {
 	if(msg.content.startsWith(prefix + "ping"));
-	msg.channel.send(math.round(client.ping));
+	msg.channel.send(parseInt(client.ping));
 })
 
 
