@@ -192,8 +192,13 @@ client.on('message', msg => {
     if(msg.content.startsWith('v!help')){
     msg.channel.send('**MÚSICA** \n v!play Para tocar uma música! \n v!stop Para parar a música! \n v!np Para saber o que está tocando! \n v!queue Para ver a lista de músicas! \n v!pause Para pausar a música! \n v!resume Para resumir a música pausada! \n v!volume Para alterar o volume do bot! \n v!skip Para pular a música!');
 }
+
+})
+
+client.on('message', msg => {
+    if(msg.author.bot) return;
     if(msg.content.startsWith('v!ping')){
-    msg.channel.send(parseInt(client.ping));
+    msg.channel.send(math.round(client.ping));
 }
 
 })
