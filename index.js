@@ -198,16 +198,10 @@ client.on('message', msg => {
 client.on('message', msg => {
     if(msg.author.bot) return;
     if(msg.content.startsWith('v!ping')){
-    msg.channel.send(math.round(client.ping));
+    msg.channel.send(Math.round(client.ping));
 }
 
 })
-
-
-
-
-
-
 
 client.login(process.env.TOKEN);
 
