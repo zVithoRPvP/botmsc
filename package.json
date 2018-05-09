@@ -1,0 +1,30 @@
+{
+  "name": "ravi",
+  "version": "1.0.0",
+  "description": "Bot em JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "yFunnyBr",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "discord.js-commando": "^0.9.0",
+    "discordv8": "^8.4.2",
+    "ffmpeg": "0.0.4",
+    "ffmpeg-binaries": "^3.2.2-3",
+    "gif-search": "^2.0.1",
+    "moment": "^2.22.1",
+    "moment-duration-format": "^2.2.2",
+    "opusscript": "0.0.6",
+    "os-utils": "0.0.14",
+    "request": "^2.85.0",
+    "simple-youtube-api": "^5.0.2",
+    "ytdl-core": "^0.20.3"
+  },
+  "engines": {
+    "node": ">8.11.1",
+    "npm": "5.6.0"
+  }
+}
