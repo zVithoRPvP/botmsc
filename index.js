@@ -209,12 +209,12 @@ client.on('message', msg => {
 		.addField('Oi! Eu sou o KanekiKen , um bot muito legal do vithor!')
 		.addField('🗣️ Linguagem:', '📚 Livraria:')
 		.addField('Javascript', 'Discord.js')
-		.addField('')
+		.addBlankField()
 		.addField('Prefixo:')
 		.addField('k!')
 		.addField('Criador: zVithoRPvP#7805')
-		.addField('')
-		.addField('')
+		.addBlankField()
+		.addBlankField()
 
 	  msg.channel.send(embed)
 }
