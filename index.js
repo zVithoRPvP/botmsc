@@ -202,6 +202,24 @@ client.on('message', msg => {
 }
 
 })
+client.on('message', msg => {
+    if(msg.author.bot) return;
+    if(msg.content.startsWith('k!info')){
+    var embed = new Discord.RichEmbed()
+		.addField('Oi! Eu sou o KanekiKen , um bot muito legal do vithor!')
+		.addField('🗣️ Linguagem:', '📚 Livraria:')
+		.addField('Javascript', 'Discord.js')
+		.addField('')
+		.addField('Prefixo:')
+		.addField('k!')
+		.addField('Criador: zVithoRPvP#7805')
+		.addField('')
+		.addField('Comando feito por:' msg.author.ToString())
+
+	  msg.channel.send(embed)
+}
+
+})
 
 
 
