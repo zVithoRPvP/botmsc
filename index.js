@@ -214,7 +214,7 @@ client.on('message', msg => {
 		.addField('k!')
 		.addField('Criador: zVithoRPvP#7805')
 		.addField('')
-		.addField('Comando feito por:' msg.author.ToString())
+		.addField('')
 
 	  msg.channel.send(embed)
 }
