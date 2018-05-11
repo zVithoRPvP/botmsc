@@ -214,7 +214,7 @@ client.on('message', msg => {
 		 .addField('Criador: ', 'zVithoRPvP#7805')
 		.addBlankField()
 		.addField('Para saber meus comandos digite k!help!')
-		.addColor(#ffe500)
+		.setColor('#ffe500')
 
 
 	  msg.channel.send(embed)
