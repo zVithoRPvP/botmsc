@@ -207,14 +207,15 @@ client.on('message', msg => {
     if(msg.content.startsWith('k!info')){
     var embed = new Discord.RichEmbed()
 		.addField('Oi! Eu sou o KanekiKen , um bot muito legal do vithor!')
-		.addField('🗣️ Linguagem:', '📚 Livraria:')
-		.addField('Javascript', 'Discord.js')
+		.addField('🗣️ Linguagem:', '📚 Livraria:', true)
+		.addField('Javascript', 'Discord.js', true)
 		.addBlankField()
-		.addField('Prefixo:')
-		.addField('k!')
-		.addField('Criador: zVithoRPvP#7805')
+	  .addField('Prefixo:', 'k!')
+		 .addField('Criador: ', 'zVithoRPvP#7805')
 		.addBlankField()
-		.addBlankField()
+		.addField('Para saber meus comandos digite k!help!')
+		.addColor(#ffe500)
+
 
 	  msg.channel.send(embed)
 }
