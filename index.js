@@ -3,6 +3,7 @@ const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 const PREFIX = "k!";
 var prefix = "k!";
+var database = require("./database.js");
 
 var client = new Discord.Client();
 const youtube = new YouTube('AIzaSyA8LJ0PQBU7heQAeeXCs5npuRJ6dpj6Et8');
@@ -197,7 +198,12 @@ client.on('message', msg => {
 
 client.on('message', msg => {
     if(msg.author.bot) return;
-    if(msg.content.startsWith('k!ping')){
+    database.Users.findOne({
+			"_id": msg.author.id
+		}) else {
+			message.reply('Sem permissão para isso, amigão.')
+		}
+		if(msg.content.startsWith('k!ping')){
     msg.channel.send(Math.round(client.ping));
 }
 
@@ -213,18 +219,40 @@ client.on('message', msg => {
 	  .addField('Prefixo:', 'k!')
 		 .addField('Criador: ', 'zVithoRPvP#7805')
 		.addBlankField()
-		.addField('Para saber meus comandos digite k!help!')
+		.addField('Para saber meus comandos digite:', 'k!help')
 		.setColor('#ffe500')
 
-
-	  msg.channel.send(embed)
+msg.channel.send(embed)
 }
 
 })
 
+client.on('message', msg => {
+	if(msg.author.bot) return;
+	if(msg.content.startsWith('k!gif')){
 
-
-
+		const request = require("request");
+	exports.run = (client,message,args)=>{
+	random = Math.random() * 15
+	msg = message.content.split(" ")
+	if(msg[1] == undefined){
+	    return message.reply("Escolha uma tag para eu procurar!")
+	}
+	var searchmsg = message.content.replace(".gif ","");
+	console.log(searchmsg);
+	request(`https://api.tenor.com/v1/search?q=${searchmsg}&key=W7VJM49HCJLC&limit=30&anon_id=3a76e56901d740da9e59ffb22b988242`, { json: true }, (err, res, body) => {
+	if (err) { return console.log(err); }
+	var embedgif = new Discord.RichEmbed()
+	.setColor(0xffff00)
+	.setAuthor(message.author.username,message.author.avatarURL)
+	.setImage(`${body['results'][parseInt(random)]['media'][0]['gif']['url']}`)
+	.setTimestamp()
+	.setFooter(client.user.username,client.user.avatarURL)
+	message.channel.send(embedgif)
+	});
+	}
+	}
+})
 
 
 
