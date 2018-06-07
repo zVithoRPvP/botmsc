@@ -1,9 +1,15 @@
 const Discord = require("discord.js");
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const PREFIX = "k!";
-var prefix = "k!";
-var database = require("./database.js");
+const PREFIX = "kk!";
+const JSONdb = require('simple-json-db');
+var prefix = "kk!";
+const db = new JSONdb("./database.json");
+const fs = require('fs')
+
+
+
+
 
 var client = new Discord.Client();
 const youtube = new YouTube('AIzaSyA8LJ0PQBU7heQAeeXCs5npuRJ6dpj6Et8');
@@ -115,7 +121,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
-			return msg.channel.send('Pausei a música pra tu , pra voltar é só digitar k!resume.');
+			return msg.channel.send('Pausei a música pra tu , pra voltar é só digitar kk!resume.');
 		}
 		return msg.channel.send('Não está tocando nada.');
 	} else if (command === 'resumir') {
@@ -188,72 +194,129 @@ function play(guild, song) {
 	serverQueue.textChannel.send(`🎶 Começou a tocar: **${song.title}**`);
 }
 
+
+
+
+
+
 client.on('message', msg => {
-    if(msg.author.bot) return;
-    if(msg.content.startsWith('k!help')){
-    msg.channel.send('**MÚSICA** \n k!tocar Para tocar uma música! \n k!parar Para parar a música! \n k!tocando Para saber o que está tocando! \n k!lista Para ver a lista de músicas! \n k!pausar Para pausar a música! \n k!resumir Para resumir a música pausada! \n k!volume Para alterar o volume do bot! \n k!pular Para pular a música!');
+
+	if(msg.channel.type === "dm") return;
+const mention = msg.mentions.users.first();
+let messageArray = msg.content.split(" ");
+let args = messageArray.slice(1);
+let cmd = messageArray[0];
+
+if(cmd === 'kk!report'){
+	let rUser = msg.guild.member(msg.mentions.users.first());
+	if(!rUser) return msg.channel.send('Não consegui achar esse membro!');
+	let reason = args.join(" ").slice(22)
+
+	let embed = new Discord.RichEmbed()
+	.setThumbnail(rUser.avatarURL)
+	.setDescription('Uma pessoa foi reportada!!')
+	.setTitle('REPORT')
+	.addField('Pessoa reportada:', `${rUser}`)
+	.addField('Reportado por:', `${msg.author} Com o ID: ${msg.author.id}`)
+	.addField('Razão do report:', reason)
+	.setFooter(`Comando feito por: ${msg.author.username}`)
+	.setColor('#0e0f0e')
+
+	let reportchannel = msg.guild.channels.find('name', "starters");
+	if(!reportchannel) return msg.channel.send('Precisa ter um canal específico para isso');
+
+	msg.delete().catch(O_o=>{})
+	msg.channel.send('Usuário reportado com sucesso - pelo motivo:');
+	msg.channel.send(reason)
+
+	reportchannel.send(embed)
 }
-
-})
-
-client.on('message', msg => {
-    if(msg.author.bot) return;
-    database.Users.findOne({
-			"_id": msg.author.id
-		}) else {
-			message.reply('Sem permissão para isso, amigão.')
-		}
-		if(msg.content.startsWith('k!ping')){
-    msg.channel.send(Math.round(client.ping));
-}
-
-})
-client.on('message', msg => {
-    if(msg.author.bot) return;
-    if(msg.content.startsWith('k!info')){
-    var embed = new Discord.RichEmbed()
-		.addField('Oi! Eu sou o KanekiKen , um bot muito legal do vithor!')
-		.addField('🗣️ Linguagem:', '📚 Livraria:', true)
-		.addField('Javascript', 'Discord.js', true)
-		.addBlankField()
-	  .addField('Prefixo:', 'k!')
-		 .addField('Criador: ', 'zVithoRPvP#7805')
-		.addBlankField()
-		.addField('Para saber meus comandos digite:', 'k!help')
-		.setColor('#ffe500')
-
-msg.channel.send(embed)
-}
-
-})
-
-client.on('message', msg => {
+  if(cmd === 'kk!add'){
+	if (msg.author.id !== "202614106962919424") return msg.channel.send('Apenas meu dono dollynho pode usar esse comando!');
 	if(msg.author.bot) return;
-	if(msg.content.startsWith('k!gif')){
+	  if(!mention) return msg.channel.send('Quem você deseja adicionar?');
+	  msg.channel.send('Usuário mencionado adicionado!!!');
+	  db.set(mention.id, '/Usuário adicionado/') ;
+	  console.log(`${msg.author.username} Adicionou ${mention.username}`);
+	  // if(!db.has(msg.author.id)) return msg.channel.send('Sem permissão');
+      // command args0 args1 args2 args3 args4 args5
+}else if(cmd === 'kk!remove'){
+ const unban = msg.mentions.users.first();
+ if(!unban) return msg.channel.send('Quem você gostaria de remover?');
+ db.delete(mention.id)
+ msg.channel.send('Usuário removido com sucesso.');
+}
+if(cmd === 'kk!help'){
+ var helpembed = new Discord.RichEmbed()
+  .setThumbnail(msg.author.avatarURL)
+  .setTitle('Ajuda do BOT')
+  .setDescription('Esta é uma lista de comandos do bot')
+  .addField('COMANDOS DE MÚSICA!', 'kk!tocar')
+  .addField( 'kk!parar', 'kk!volume')
+  .addField( 'kk!tocando', 'kk!pausar')
+  .addField( 'kk!resumir', 'kk!pular')
+  .addBlankField()
+  .addField('Comandos especiais (apenas membros que eu adicionar podem usar)', 'kk!eval')
+  .addBlankField()
+  .addField('Comandos para diversão! (eu acho inúteis)', 'kk!rasengan')
+  .addField('kk!susanoo', 'kk!modohacker')
+  .addField('kk!centipedeinyourears','Só isso')
+  .setAuthor('zVithoRPvP#7805')
+  .setColor('#2bba0e')
 
-		const request = require("request");
-	exports.run = (client,message,args)=>{
-	random = Math.random() * 15
-	msg = message.content.split(" ")
-	if(msg[1] == undefined){
-	    return message.reply("Escolha uma tag para eu procurar!")
+  msg.author.send(helpembed)
+  msg.channel.send('Enviei uma lista de comandos no seu privado , acesse lá :D')
+
+
+}
+if(cmd === 'kk!eval'){
+	try {
+	if(!db.has(msg.author.id)) return msg.channel.send('Sem permissão');
+	var codigo = args.join(" ").slice(8)
+	var resultado = eval(codigo);
+	if(!codigo) return  msg.reply('Você precisa descrever um código')
+	var evalembed = new Discord.RichEmbed()
+	.setTitle('EVAL')
+	.addField('Entrada:', codigo)
+	.addField('Saída:', resultado)
+    .setFooter(`Comando feito por: ${msg.author.username}`)
+	.setColor('#05275e')
+	
+	msg.channel.send(evalembed);
+	console.log(`Ocorreu um EVAL feito por ${msg.author.username}`)
+	} catch(err) {
+		msg.channel.send(err)
 	}
-	var searchmsg = message.content.replace(".gif ","");
-	console.log(searchmsg);
-	request(`https://api.tenor.com/v1/search?q=${searchmsg}&key=W7VJM49HCJLC&limit=30&anon_id=3a76e56901d740da9e59ffb22b988242`, { json: true }, (err, res, body) => {
-	if (err) { return console.log(err); }
-	var embedgif = new Discord.RichEmbed()
-	.setColor(0xffff00)
-	.setAuthor(message.author.username,message.author.avatarURL)
-	.setImage(`${body['results'][parseInt(random)]['media'][0]['gif']['url']}`)
-	.setTimestamp()
-	.setFooter(client.user.username,client.user.avatarURL)
-	message.channel.send(embedgif)
-	});
-	}
-	}
+}
+if(cmd === 'kk!rasengan'){
+	var alvo = msg.mentions.users.first()
+	if(!alvo) return msg.reply('Você precisa escolher um alvo!')
+	var rasenganfile = new Discord.Attachment()
+	.setAttachment('https://media.tenor.com/images/34c5d041263e2b89d137639836fdd881/tenor.gif','rasengandokaneki.gif')
+
+    msg.channel.send('Você <@' + msg.author.id + '> usou um Rasengan em <@' + alvo.id + ">",rasenganfile)
+}
+if(cmd === 'kk!susanoo'){
+	var susanofile = new Discord.Attachment()
+	.setAttachment('https://media1.tenor.com/images/23063a29107056820f59355f79374840/tenor.gif','susanoodokaneki.gif')
+
+    msg.channel.send('Você <@' + msg.author.id + '> ativou seu susano para se defender e ficar blindão',susanofile)
+}
+if(cmd === 'kk!modohacker'){
+	var kaneki1file = new Discord.Attachment()
+	.setAttachment('https://i.makeagif.com/media/4-07-2015/01k4pr.gif','modohackerdokaneki.gif')
+
+    msg.channel.send('Você <@' + msg.author.id + '> Ativou o modo hacker do kaneki , o mais fodástico e você consegue matar o jason',kaneki1file)
+}
+if(cmd === 'kk!centipedeinyourears'){
+	var centipedeinyourearsfile = new Discord.Attachment()
+	.setAttachment('https://i.pinimg.com/originals/69/5e/d7/695ed78c1acfe15c360020f5af903080.gif','centipedeinyourearsdokaneki.gif')
+
+    msg.channel.send('Você <@' + msg.author.id + '> Consegue retirar uma centopéia de seus ouvidos!',centipedeinyourearsfile)
+}
+if(cmd === 'kk!'){
+	msg.channel.send('O que você gostaria de fazer?')
+}
+
 })
-
-
-
-client.login(process.env.TOKEN);
+client.login('NDQ0MjUyNTIyNTk3NzExODcz.DeyqwQ.SQ1U9LDSSWAvuauEmut-mQ5aLeU');
