@@ -6,6 +6,7 @@ const JSONdb = require('simple-json-db');
 var prefix = "kk!";
 const db = new JSONdb("./database.json");
 const fs = require('fs')
+var databaseteste = require("./umdatabaseteste.js")
 
 
 
@@ -111,7 +112,7 @@ Por favor escolha um número de 1 a 10.
 		if (!serverQueue) return msg.channel.send('Não está tocando nada.');
 		return msg.channel.send(`🎶 Tocando agora: **${serverQueue.songs[0].title}**`);
 	} else if (command === 'lista') {
-		if (!serverQueue) return msg.channel.send('Nada tocando.');
+		if (!serverQueue) return msg.channel.send(' Nada tocando.');
 		return msg.channel.send(`
 __**Lista de musicas:**__
 ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
@@ -168,7 +169,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 	} else {
 		serverQueue.songs.push(song);
 		if (playlist) return undefined;
-		else return msg.channel.send(`✅ **${song.title}** Foi adicionado á lista!`);
+		else return msg.channel.send(`<:correto:438399398733414401> **${song.title}** Foi adicionado á lista!`);
 	}
 	return undefined;
 }
@@ -191,7 +192,7 @@ function play(guild, song) {
 		.on('error', error => console.error(error));
 	dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-	serverQueue.textChannel.send(`🎶 Começou a tocar: **${song.title}**`);
+	serverQueue.textChannel.send(`<:correto:438399398733414401> Começando a tocar a música **${song.title}**`);
 }
 
 
@@ -226,7 +227,7 @@ if(cmd === 'kk!report'){
 	if(!reportchannel) return msg.channel.send('Precisa ter um canal específico para isso');
 
 	msg.delete().catch(O_o=>{})
-	msg.channel.send('Usuário reportado com sucesso - pelo motivo:');
+	msg.channel.send('<:correto:438399398733414401> Usuário reportado com sucesso - pelo motivo:');
 	msg.channel.send(reason)
 
 	reportchannel.send(embed)
@@ -317,6 +318,33 @@ if(cmd === 'kk!centipedeinyourears'){
 if(cmd === 'kk!'){
 	msg.channel.send('O que você gostaria de fazer?')
 }
+if(cmd === 'kk!botinfo'){
+	var Botinfoembed = new Discord.RichEmbed()
+	.setFooter(`Comando utilizado por: ${msg.author.username}`)
+	.setTitle('Informações do KanekiKen!')
+	.setDescription('Meu nome é Kaneki, fui criado pelo zVithoRPvP#7805')
+	.addField(':speaking_head:️ Minha linguagem:', 'JavaScript', true)
+	.addField(':books: Minha livraria:', 'Discord.js', true)
+	.addField('Para ver meus comandos utilize:','kk!help', true)
+	.setThumbnail('https://image.freepik.com/icones-gratis/roda-com-engrenagens_318-64451.jpg')
+	.setAuthor(msg.author.tag)
+
+	msg.channel.send(Botinfoembed)
+ }
+ if(cmd === 'kk!serverinfo'){
+   var serverinfoembed = new Discord.RichEmbed()
+   .setFooter(`Comando utilizado por: ${msg.author.username}`)
+   .setTitle(`Informações de ${msg.guild.name}`)
+   .addField('Dono:', `${msg.guild.owner}`, true)
+   .addField('Membros:', `${msg.guild.memberCount}`)
+   .addField('<:gordox:432410931297779712> Número total de canais:', `${msg.guild.channels.size}`)
+	
+   
+    msg.channel.send(serverinfoembed)
+
+    
+}
+
 
 })
 client.login('NDQ0MjUyNTIyNTk3NzExODcz.DeyqwQ.SQ1U9LDSSWAvuauEmut-mQ5aLeU');

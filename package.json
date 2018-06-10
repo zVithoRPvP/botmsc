@@ -17,13 +17,13 @@
     "gif-search": "^2.0.1",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
+    "mongoose": "^5.1.4",
     "opusscript": "0.0.6",
     "os-utils": "0.0.14",
     "request": "^2.85.0",
     "simple-json-db": "^1.2.1",
     "simple-youtube-api": "^5.0.2",
     "ytdl-core": "^0.20.3"
- 
   },
   "engines": {
     "node": ">8.11.1",
