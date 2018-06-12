@@ -269,25 +269,8 @@ if(cmd === 'kk!help'){
   msg.channel.send('Enviei uma lista de comandos no seu privado , acesse lá :D')
 
 
-}
-if(cmd === 'kk!eval'){
-	try {
-	if(!db.has(msg.author.id)) return msg.channel.send('Sem permissão');
-	var codigo = args.join(" ").slice(8)
-	var resultado = eval(codigo);
-	if(!codigo) return  msg.reply('Você precisa descrever um código')
-	var evalembed = new Discord.RichEmbed()
-	.setTitle('EVAL')
-	.addField('Entrada:', codigo)
-	.addField('Saída:', resultado)
-    .setFooter(`Comando feito por: ${msg.author.username}`)
-	.setColor('#05275e')
-	
-	msg.channel.send(evalembed);
-	console.log(`Ocorreu um EVAL feito por ${msg.author.username}`)
-	} catch(err) {
-		msg.channel.send(err)
-	}
+
+
 }
 if(cmd === 'kk!rasengan'){
 	var alvo = msg.mentions.users.first()
@@ -344,7 +327,31 @@ if(cmd === 'kk!botinfo'){
 
     
 }
-
-
+if(cmd === 'kk!gif'){
+	if(!msg.channel.permissionsFor(client.user.id).has('EMBED_LINKS')) return msg.channel.send("Por favor, me dê a permissão EMBED_LINKS para esse e outros comandos funcionarem.");
+var giphy = require( 'giphy' )('a4cf068bc86a4a939ecb883414318a2c');
+giphy.search({
+    q: msg.content.split(" ").slice(1).join("+"),
+    limit: 1
+}, function (err, res) {
+    if(err) {
+        message.reply('Busca sem resultado')
+        console.log(err)
+    } else if (res.data.length < 0) {
+     message.reply("Você não botou a pesquisa")
+    } else if(res.data.length > 0) {
+      		let embed = new Discord.RichEmbed()
+           .setImage(res.data[0].images.original.url)
+           .setTimestamp()
+          	.setAuthor(msg.author.username, msg.author.avatarURL)
+          msg.channel.send({embed})
+    }
+});
+		}
+	if(cmd === 'kk!ping'){
+		var pingembed = new Discord.RichEmbed()
+		.addField(`Pong! meu ping é ${Math.round(client.ping)} ms!`)
+		.setFooter(`Comando utilizado por: ${msg.author.username}`)
+	}
 })
 client.login('NDQ0MjUyNTIyNTk3NzExODcz.DeyqwQ.SQ1U9LDSSWAvuauEmut-mQ5aLeU');

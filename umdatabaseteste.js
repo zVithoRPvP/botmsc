@@ -6,3 +6,19 @@ mongoose.connect("mongodb://Vithor:paimae12@ds121483.mlab.com:21483/umdatabasete
     if (err) return console.log("Erro ao conectar no database 'umdatabaseteste'");
     console.log("Conectado ao database 'umdatabaseteste' ");
 })
+var User = new Schema({
+    _id: {
+        type: String
+    },
+    coins: {
+        type: Number,
+        default: 0
+    },
+    ban: {
+        type: Boolean,
+        default: false
+    }
+})
+
+var Users = mongoose.model("Users", User);
+exports.Users = Users

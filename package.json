@@ -15,6 +15,7 @@
     "ffmpeg": "0.0.4",
     "ffmpeg-binaries": "^3.2.2-3",
     "gif-search": "^2.0.1",
+    "giphy": "0.0.4",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
     "mongoose": "^5.1.4",
