@@ -8,7 +8,23 @@ const db = new JSONdb("./database.json");
 const fs = require('fs')
 var databaseteste = require("./umdatabaseteste.js")
 
+function registerUser (id) {
+	var usuario = new databaseteste.Users({
+		_id: id
+	});
+   usuario.save();
 
+}
+let ban;
+function getUser (id) {
+	databaseteste.Users.findOne({ _id: id}, function(err, doc) {
+		if(doc){
+			ban = doc.ban
+		} else {
+			registerUser(id);
+		}
+	});
+}
 
 
 
@@ -202,11 +218,17 @@ function play(guild, song) {
 
 client.on('message', msg => {
 
-	if(msg.channel.type === "dm") return;
+if(msg.channel.type === "dm") return;
 const mention = msg.mentions.users.first();
 let messageArray = msg.content.split(" ");
 let args = messageArray.slice(1);
 let cmd = messageArray[0];
+getUser(msg.author.id);
+databaseteste.Users.findOne({ _id: msg.author.id}, function(err, doc) {
+	if(doc) {
+		if(ban) msg.reply('Você está banido de me utilizar!')
+	}
+})
 
 if(cmd === 'kk!report'){
 	let rUser = msg.guild.member(msg.mentions.users.first());
@@ -301,21 +323,16 @@ if(cmd === 'kk!centipedeinyourears'){
 if(cmd === 'kk!'){
 	msg.channel.send('O que você gostaria de fazer?')
 }
-if(cmd === 'kk!botinfo'){
-	var Botinfoembed = new Discord.RichEmbed()
-	.setFooter(`Comando utilizado por: ${msg.author.username}`)
-	.setTitle('Informações do KanekiKen!')
-	.setDescription('Meu nome é Kaneki, fui criado pelo zVithoRPvP#7805')
-	.addField(':speaking_head:️ Minha linguagem:', 'JavaScript', true)
-	.addField(':books: Minha livraria:', 'Discord.js', true)
-	.addField('Para ver meus comandos utilize:','kk!help', true)
-	.setThumbnail('https://image.freepik.com/icones-gratis/roda-com-engrenagens_318-64451.jpg')
-	.setAuthor(msg.author.tag)
 
-	msg.channel.send(Botinfoembed)
- }
+	
+	
  if(cmd === 'kk!serverinfo'){
-   var serverinfoembed = new Discord.RichEmbed()
+   databaseteste.Users.findOne({ _id: msg.author.id}, function (erro, documento){
+
+   if(documento){
+	if (ban) return msg.channel.send("Você está banido de me utlizar!");
+	
+	var serverinfoembed = new Discord.RichEmbed()
    .setFooter(`Comando utilizado por: ${msg.author.username}`)
    .setTitle(`Informações de ${msg.guild.name}`)
    .addField('Dono:', `${msg.guild.owner}`, true)
@@ -324,8 +341,10 @@ if(cmd === 'kk!botinfo'){
 	
    
     msg.channel.send(serverinfoembed)
-
-    
+   } else {
+	   msg.channel.send('Hummm, você não está registrado no database, isto é, um erro. - Tente novamente o comando e provavelmente irá funcionar')
+   }
+   })
 }
 if(cmd === 'kk!gif'){
 	if(!msg.channel.permissionsFor(client.user.id).has('EMBED_LINKS')) return msg.channel.send("Por favor, me dê a permissão EMBED_LINKS para esse e outros comandos funcionarem.");
@@ -343,15 +362,106 @@ giphy.search({
       		let embed = new Discord.RichEmbed()
            .setImage(res.data[0].images.original.url)
            .setTimestamp()
-          	.setAuthor(msg.author.username, msg.author.avatarURL)
-          msg.channel.send({embed})
+           .setAuthor(msg.author.username, msg.author.avatarURL)
+          msg.channel.send({embed});
     }
 });
-		}
-	if(cmd === 'kk!ping'){
-		var pingembed = new Discord.RichEmbed()
-		.addField(`Pong! meu ping é ${Math.round(client.ping)} ms!`)
-		.setFooter(`Comando utilizado por: ${msg.author.username}`)
+		
+	
+	
 	}
+	if(cmd === 'kk!ban'){
+		if (msg.author.id !== "202614106962919424") return msg.channel.send('Apenas meu dono pode usar esse comando!');
+		let user = msg.mentions.users.first();
+		if(!user) return msg.reply('Mencione alguém para banir!');
+		databaseteste.Users.findOne({ _id: user.id}, function(erro, documento) {
+			if(documento){
+				documento.ban = true,
+				documento.coins = 0,
+ 
+				documento.save();
+				
+
+
+			} 
+			msg.channel.send('Usuário banido de me utilizar.');
+		})
+		
+	}
+	if(cmd === 'kk!unban'){
+		if (msg.author.id !== "202614106962919424") return msg.channel.send('Apenas meu dono pode usar esse comando!');
+		let user = msg.mentions.users.first();
+		if(!user) return msg.reply('Mencione alguém para desbanir!');
+		databaseteste.Users.findOne({ _id: user.id}, function(erro, documento) {
+			if(documento){
+				documento.ban = false,
+				documento.coins = 0,
+ 
+				documento.save();
+				
+
+
+			} 
+			msg.channel.send('Usuário desbanido.');
+		})
+		
+	}
+	if(cmd === 'kk!ajd') {
+		if (msg.author.id !== "202614106962919424") return msg.channel.send('Apenas meu dono pode usar esse comando!');
+		let ajudante = msg.mentions.users.first();
+		if(!ajudante) return msg.reply('Mencione o usuário para virar ajudante!');
+		databaseteste.Users.findOne({ _id: ajudante.id}, function(err, doc) {
+			if(doc) {
+				doc.ajudante = true,
+				doc.coins = 0,
+				doc.ban = false
+
+				doc.save();
+			}
+		msg.channel.send(`${ajudante.username} Agora é um Ajudante!`);
+		})
+	}
+if(cmd === 'kk!register') {
+	if (msg.author.id !== "202614106962919424") return msg.channel.send('Apenas meu dono pode usar esse comando!');
+msg.channel.send("Registrando todas as pessoas no bot\n"+ client.users.size +" usuários serão registrados.");
+let x = 0;
+let y = 0;
+client.users.map(g => {
+  databaseteste.Users.findOne({ _id: g.id }, function (e, d) {
+    if (d) {
+      y++;
+    } else {
+      var user = new databaseteste.Users({
+        _id: g.id
+      })
+      user.save();
+      x++;
+    }
+  });
+});
+msg.channel.send("Boa! "+ x +" usuários registrados, e "+ y +" já registrados.");
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 })
-client.login('NDQ0MjUyNTIyNTk3NzExODcz.DeyqwQ.SQ1U9LDSSWAvuauEmut-mQ5aLeU');
+client.login(process.env.TOKEN);

@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-mongoose.connect("mongodb://Vithor:paimae12@ds121483.mlab.com:21483/umdatabaseteste", {
+mongoose.connect(process.env.database, {
     useMongoClient: true
 }, (err) => {
     if (err) return console.log("Erro ao conectar no database 'umdatabaseteste'");
@@ -15,6 +15,10 @@ var User = new Schema({
         default: 0
     },
     ban: {
+        type: Boolean,
+        default: false
+    },
+    ajudante: {
         type: Boolean,
         default: false
     }
